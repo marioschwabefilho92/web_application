@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+
+  database:
+    build: ./database
+    restart: always
+    ports:
+      - 5432:5432

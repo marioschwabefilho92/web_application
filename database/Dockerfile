@@ -1,4 +1,5 @@
 FROM postgres
 ENV POSTGRES_PASSWORD=password
 ENV POSTGRES_USER=postgres
-COPY ./init-user-db.sh /docker-entrypoint-initdb.d/
+COPY ./auser.sh /docker-entrypoint-initdb.d/
+COPY ./class.sql /docker-entrypoint-initdb.d/
