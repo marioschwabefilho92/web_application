@@ -12,8 +12,29 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
     ports:
       - 5432:5432
+    networks:
+      network_configuration:
+        ipv4_address: ${DATABASE_IP}
+    command:
+      [
+        "postgres",
+        "-c",
+        "log_statement=all",
+        "-c",
+        "log_destination=stderr"
+      ]
 
   app:
     build: ./backend
     ports:
       - 5000:5000
+    networks:
+      network_configuration:
+        ipv4_address: ${APP_IP}
+
+networks:
+  network_configuration:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
