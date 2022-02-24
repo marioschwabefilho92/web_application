@@ -1,33 +1,15 @@
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-import datetime
-
+from models import db, Articles, Author
+from schemas import ArticleSchema, AuthorSchema
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@172.20.1.1/mydatabase'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
 
-
-class Articles(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(60))
-    body = db.Column(db.Text())
-    date = db.Column(db.DateTime, default=datetime.datetime.now)
-
-    def __init__(self, title, body) -> None:
-        self.title = title
-        self.body = body
-
-
-class ArticleSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'title', 'body', 'date')
-
+db.init_app(app)
+db.create_all()
 
 article_schema = ArticleSchema()
 articles_schema = ArticleSchema(many=True)
