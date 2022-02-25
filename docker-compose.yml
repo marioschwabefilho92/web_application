@@ -26,6 +26,8 @@ services:
 
   app:
     build: ./backend
+    environment:
+      - PYTHONUNBUFFERED=1
     ports:
       - 5000:5000
     networks:
@@ -37,4 +39,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 192.168.0.0/16

@@ -14,3 +14,8 @@ class AuthorSchema(Schema):
 
     def format_name(self, author):
         return f"{author.last}, {author.first}"
+
+
+class StudentSchema(Schema):
+    class Meta:
+        fields = ('id', 'name')

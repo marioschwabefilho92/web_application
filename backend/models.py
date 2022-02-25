@@ -19,3 +19,11 @@ class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first = db.Column(db.String(80))
     last = db.Column(db.String(80))
+
+
+class Students(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String())
+
+    def __init__(self, name) -> None:
+        self.name = name
