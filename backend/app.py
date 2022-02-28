@@ -1,7 +1,6 @@
-import re
 from flask import Flask, jsonify, request
-from models import db, Articles, Author, Students
-from schemas import ArticleSchema, AuthorSchema, StudentSchema
+from models import db, Students, Grades
+from schemas import StudentSchema, GradeSchema
 
 app = Flask(__name__)
 
@@ -11,45 +10,64 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-article_schema = ArticleSchema()
-articles_schema = ArticleSchema(many=True)
 
 student_schema = StudentSchema()
 students_schema = StudentSchema(many=True)
 
+grade_schema = GradeSchema()
+grades_schema = GradeSchema(many=True)
 
-# @app.route('/get', methods=['GET'])
-# def get_articles():
-#     all_articles = Articles.query.all()
-#     results = articles_schema.dump(all_articles)
-#     return jsonify(results)
 
-@app.route('/get', methods=['GET'])
+@app.route('/get/students', methods=['GET'])
 def get_students():
     all_students = Students.query.all()
     results = students_schema.dump(all_students)
     return jsonify(results)
 
 
-@app.route('/add', methods=['POST'])
+@app.route('/get/student/<id>', methods=['GET'])
+def get_student_by_id(id):
+    student = Students.query.get(id)
+    results = student_schema.dump(student)
+    return jsonify(results)
+
+
+@app.route('/add/student', methods=['POST'])
 def add_student():
     name = request.json['name']
 
     students = Students(name)
+    results = student_schema.dump(students)
     db.session.add(students)
     db.session.commit()
-    return students_schema.jsonify(students)
+    return jsonify(results)
 
 
-@app.route('/post', methods=['POST'])
-def add_article():
-    title = request.json['title']
-    body = request.json['body']
+@app.route('/get/grades', methods=['GET'])
+def get_grades():
+    all_grades = Grades.query.all()
+    results = grades_schema.dump(all_grades)
+    return jsonify(results)
 
-    articles = Articles(title, body)
-    db.session.add(articles)
+
+@app.route('/get/grade/<id>', methods=['GET'])
+def get_grades_by_id(id):
+    grade = Grades.query.get(id)
+    results = grade_schema.dump(grade)
+    return jsonify(results)
+
+
+@app.route('/add/grade', methods=['POST'])
+def add_grade():
+    students_id = request.json['students_id']
+    discipline = request.json['discipline']
+    mark = request.json['mark']
+
+    grades = Grades(students_id, discipline, mark)
+    results = grade_schema.dump(grades)
+    db.session.add(grades)
     db.session.commit()
-    return article_schema.jsonify(articles)
+    return jsonify(results)
 
 
 if __name__ == "__main__":

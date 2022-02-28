@@ -1,24 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-import datetime
 
 db = SQLAlchemy()
-
-
-class Articles(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(60))
-    body = db.Column(db.Text())
-    date = db.Column(db.DateTime, default=datetime.datetime.now)
-
-    def __init__(self, title, body) -> None:
-        self.title = title
-        self.body = body
-
-
-class Author(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first = db.Column(db.String(80))
-    last = db.Column(db.String(80))
 
 
 class Students(db.Model):
@@ -27,3 +9,16 @@ class Students(db.Model):
 
     def __init__(self, name) -> None:
         self.name = name
+
+
+class Grades(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    students_id = db.Column(db.Integer, db.ForeignKey(
+        'students.id'), nullable=False)
+    discipline = db.Column(db.String(), nullable=False)
+    mark = db.Column(db.Integer(), nullable=False)
+
+    def __init__(self, students_id, discipline, mark) -> None:
+        self.students_id = students_id
+        self.discipline = discipline
+        self.mark = mark
