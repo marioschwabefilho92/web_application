@@ -1,15 +1,28 @@
-import './App.css';
-import { useState, useEffect } from 'react';
+import axios from "axios";
+import React from "react";
 
-function App() {
+const getStudentsUrl = "http://192.168.100.2:5000//get/students";
 
-  const [students, setStudents] = useState([])
+export default function App() {
+  const [students, setStudents] = React.useState(null);
+  const [error, setError] = React.useState(null);
+
+  React.useEffect(() => {
+    // invalid url will trigger an 404 error
+    axios.get(`${getStudentsUrl}`).then((response) => {
+      setStudents(response.data);
+    }).catch(error => {
+      setError(error);
+    });
+  }, []);
+
+  if (error) return `Error: ${error.message}`;
+  if (!students) return "No Students!"
+  console.log(students)
 
   return (
-    <div className="App">
-      <h1>Hello</h1>
+    <div>
+      <h1>{students}</h1>
     </div>
   );
 }
-
-export default App;
