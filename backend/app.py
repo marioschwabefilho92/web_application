@@ -1,8 +1,11 @@
+from re import A
 from flask import Flask, jsonify, request
 from models import db, Students, Grades
 from schemas import StudentSchema, GradeSchema
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@192.168.100.1/class'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -16,6 +19,11 @@ students_schema = StudentSchema(many=True)
 
 grade_schema = GradeSchema()
 grades_schema = GradeSchema(many=True)
+
+
+@app.route('/', methods=['GET'])
+def main():
+    return jsonify("MAIN")
 
 
 @app.route('/get/students', methods=['GET'])
