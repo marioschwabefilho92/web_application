@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Students } from "./components/Students";
+import { ErrorBoundary } from "./utils";
 
 const getStudentsUrl = "http://192.168.100.2:5000/get/students";
 
@@ -21,14 +22,9 @@ export default function App() {
 
   return (
     <div>
-      <h1>HELLO</h1>
-      {students.map(student => {
-        return (
-          <div key={student.id}>
-            <h2>{student.name}</h2>
-          </div>
-        )
-      })}
+      <ErrorBoundary>
+        <Students students={students} />
+      </ErrorBoundary>
     </div>
   );
 }
