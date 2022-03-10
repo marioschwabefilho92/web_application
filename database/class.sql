@@ -36,4 +36,7 @@ VALUES
     (3, 'Physics', 44),
     (4, 'Biology', 16),
     (4, 'Math', 45),
-    (4, 'Physics', 87);
+    (4, 'Physics', 87),
+    (1, 'Biology', 22),
+    (1, 'Math', 11),
+    (1, 'Physics', 33);

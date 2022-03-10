@@ -1,4 +1,3 @@
-from re import A
 from flask import Flask, jsonify, request
 from models import db, Students, Grades
 from schemas import ma, StudentSchema, GradeSchema
