@@ -54,6 +54,15 @@ def add_student():
     return jsonify(results)
 
 
+@app.route('/del/student/<id>', methods=['DELETE'])
+def del_student(id):
+    student = Students.query.get(id)
+    db.session.delete(student)
+    db.session.commit()
+
+    return jsonify(student)
+
+
 @app.route('/get/grades', methods=['GET'])
 def get_grades():
     all_grades = Grades.query.all()
@@ -79,6 +88,15 @@ def add_grade():
     db.session.add(grades)
     db.session.commit()
     return jsonify(results)
+
+
+@app.route('/del/grade/<id>', methods=['DELETE'])
+def del_grade(id):
+    grade = Grades.query.get(id)
+    db.session.delete(grade)
+    db.session.commit()
+
+    return jsonify(grade)
 
 
 if __name__ == "__main__":

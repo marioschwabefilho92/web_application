@@ -3,17 +3,18 @@ import React, { useState, useEffect } from "react";
 import { Students } from "./components/Students";
 import { ErrorBoundary } from "./utils";
 import { Table } from 'react-bootstrap';
+import { URLS } from "./routes/Routes";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-const getStudentsUrl = "http://192.168.100.2:5000/get/students";
+
 
 export default function App() {
   const [students, setStudents] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`${getStudentsUrl}`).then((response) => {
+    axios.get(`${URLS.GET_STUDENTS}`).then((response) => {
       setStudents(response.data);
     }).catch(error => {
       setError(error);
