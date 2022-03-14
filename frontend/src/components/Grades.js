@@ -6,17 +6,16 @@ import { URLS } from "../routes/Routes";
 export function Grades(props) {
     const [error, setError] = useState(null);
 
-    const deleteGrade = (id, students_id) => {
-        console.log("Delete Clicked")
-        console.log(id)
-        console.log(students_id)
-        axios.get(`${URLS.DEL_STUDENT}${students_id}`).then((response) => {
-            console.log(response)
+    const deleteGrade = (id) => {
+        console.log("deleteGrade triggered")
+        axios.delete(`${URLS.DEL_GRADE}${id}`).then((response) => {
+            if (response.status == "200") {
+                window.location.reload(false);
+            }
         }).catch(error => {
             setError(error);
         });
     }
-    console.log(error)
 
     return (
         <>
@@ -26,8 +25,9 @@ export function Grades(props) {
                         <td>{props.name}</td>
                         <td>{grade.discipline}</td>
                         <td>{grade.mark}</td>
+
                         <td>
-                            <button type="button" className="btn btn-danger" onClick={() => deleteGrade(grade.id, grade.students_id)}>Delete</button>
+                            <button type="button" className="btn btn-danger" onClick={() => deleteGrade(grade.id)}>Delete</button>
                         </td>
                     </tr>
                 )

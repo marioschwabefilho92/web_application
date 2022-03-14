@@ -36,31 +36,42 @@ def get_students():
     return jsonify(results)
 
 
-@app.route('/get/student/<id>', methods=['GET'])
-def get_student_by_id(id):
-    student = Students.query.get(id)
-    results = student_schema.dump(student)
-    return jsonify(results)
-
-
 @app.route('/add/student', methods=['POST'])
 def add_student():
     name = request.json['name']
 
-    students = Students(name)
-    results = student_schema.dump(students)
-    db.session.add(students)
+    student = Students(name)
+    db.session.add(student)
     db.session.commit()
-    return jsonify(results)
+    return student_schema.jsonify(student)
+
+
+@app.route('/get/student/<id>', methods=['GET'])
+def get_student_by_id(id: int):
+    student = Students.query.get(id)
+    return student_schema.jsonify(student)
+
+
+@app.route('/update/student/<id>', methods=['PUT'])
+def update_student(id: int):
+    student = Students.query.get(id)
+
+    name = request.json['name']
+
+    student.name = name
+
+    db.session.commit()
+
+    return student_schema.jsonify(student)
 
 
 @app.route('/del/student/<id>', methods=['DELETE'])
-def del_student(id):
+def del_student(id: int):
     student = Students.query.get(id)
     db.session.delete(student)
     db.session.commit()
 
-    return jsonify(student)
+    return student_schema.jsonify(student)
 
 
 @app.route('/get/grades', methods=['GET'])
@@ -70,33 +81,47 @@ def get_grades():
     return jsonify(results)
 
 
-@app.route('/get/grade/<id>', methods=['GET'])
-def get_grades_by_id(id):
-    grade = Grades.query.get(id)
-    results = grade_schema.dump(grade)
-    return jsonify(results)
-
-
 @app.route('/add/grade', methods=['POST'])
 def add_grade():
     students_id = request.json['students_id']
     discipline = request.json['discipline']
     mark = request.json['mark']
 
-    grades = Grades(students_id, discipline, mark)
-    results = grade_schema.dump(grades)
-    db.session.add(grades)
+    grade = Grades(students_id, discipline, mark)
+    db.session.add(grade)
     db.session.commit()
-    return jsonify(results)
+    return grade_schema.jsonify(grade)
+
+
+@app.route('/get/grade/<id>', methods=['GET'])
+def get_grades_by_id(id: int):
+    grade = Grades.query.get(id)
+    return grade_schema.jsonify(grade)
+
+
+@app.route('/update/grade/<id>', methods=['PUT'])
+def update_grade(id: int):
+    grade = Grades.query.get(id)
+
+    students_id = request.json['students_id']
+    discipline = request.json['discipline']
+    mark = request.json['mark']
+
+    grade.students_id = students_id
+    grade.discipline = discipline
+    grade.mark = mark
+
+    db.session.commit()
+    return grade_schema.jsonify(grade)
 
 
 @app.route('/del/grade/<id>', methods=['DELETE'])
-def del_grade(id):
+def del_grade(id: int):
     grade = Grades.query.get(id)
     db.session.delete(grade)
     db.session.commit()
 
-    return jsonify(grade)
+    return grade_schema.jsonify(grade)
 
 
 if __name__ == "__main__":
