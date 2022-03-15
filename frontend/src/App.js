@@ -7,14 +7,12 @@ import { URLS } from "./routes/Routes";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-
-
 export default function App() {
   const [students, setStudents] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`${URLS.GET_STUDENTS}`).then((response) => {
+    axios.get(`${URLS.GET.STUDENTS}`).then((response) => {
       setStudents(response.data);
     }).catch(error => {
       setError(error);
