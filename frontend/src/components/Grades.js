@@ -1,11 +1,15 @@
 import React from "react";
 import { useState } from "react";
-import ConfirmDelete from "../forms/ConfirmDelete"
+import ConfirmDelete from "../modals/ConfirmDelete"
+import UpdateGrade from "../modals/UpdateGrade";
 import { deleteGrade } from "../routes/Routes";
+import Button from 'react-bootstrap/Button'
 
 export function Grades(props) {
-    const [modalShow, setModalShow] = useState(false);
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+    const [showUpdateGrade, setShowUpdateGrade] = useState(false);
     const [gradeId, setGradeId] = useState();
+    const [studentId, setStudentId] = useState();
 
     return (
         <>
@@ -16,21 +20,40 @@ export function Grades(props) {
                         <td>{grade.discipline}</td>
                         <td>{grade.mark}</td>
                         <td>
-                            <button type="button" className="btn btn-danger" onClick={() => {
-                                setModalShow(true);
+                            <Button onClick={() => {
+                                setShowUpdateGrade(true);
                                 setGradeId(grade.id)
-                            }}>Delete</button>
+                                setStudentId(props.student_id)
+                            }}>Update</Button>
+                        </td>
+                        <td>
+                            <Button variant="danger" onClick={() => {
+                                setShowConfirmDelete(true);
+                                setGradeId(grade.id)
+                            }}>Delete</Button>
                         </td>
                     </tr>
                 )
             })}
-            {modalShow ?
-                <ConfirmDelete
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                    onSubmit={() => deleteGrade(gradeId)}
-                />
-                : false}
+            {
+                showConfirmDelete ?
+                    <ConfirmDelete
+                        show={showConfirmDelete}
+                        onHide={() => setShowConfirmDelete(false)}
+                        onSubmit={() => deleteGrade(gradeId)}
+                    />
+                    : false
+            }
+            {
+                showUpdateGrade ?
+                    <UpdateGrade
+                        show={showUpdateGrade}
+                        id={gradeId}
+                        student_id={studentId}
+                        onHide={() => setShowUpdateGrade(false)}
+                    />
+                    : false
+            }
 
         </>
     )
