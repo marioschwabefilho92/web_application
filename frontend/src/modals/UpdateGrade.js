@@ -7,10 +7,11 @@ import { updateGrade } from "../routes/Routes";
 
 export default function UpdateGrade(props) {
     const [formValue, setFormValue] = useState({
-        username: "",
-        discipline: "",
-        mark: "",
+        students_id: props.students_id,
+        discipline: props.discipline,
+        mark: props.mark
     });
+    const [avaliableDisciplines] = useState(["Biology", "Math", "Physics"]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -24,11 +25,10 @@ export default function UpdateGrade(props) {
     };
 
     const handleSubmit = () => {
-        updateGrade(1, formValue)
+        updateGrade(props.id, formValue)
     };
 
-    const { username, discipline, mark } = formValue;
-    console.log(props)
+    const { discipline, mark } = formValue;
     return (
         <Modal
             {...props}
@@ -46,21 +46,20 @@ export default function UpdateGrade(props) {
                     <Form.Group className="mb-3">
                         <Form.Label>Name</Form.Label>
                         <Form.Control
-                            required
+                            disabled
                             type="text"
-                            name="username"
-                            placeholder={username}
-                            defaultValue="Name"
-                            onChange={handleChange}
+                            defaultValue={props.student_name}
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>Discipline</Form.Label>
                         <Form.Select name="discipline" placeholder={discipline} onChange={handleChange}>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            {avaliableDisciplines.map((discipline, id) => {
+                                return (
+                                    <option key={id}>{discipline}</option>
+                                )
+                            })}
                         </Form.Select>
                     </Form.Group>
 
@@ -71,7 +70,7 @@ export default function UpdateGrade(props) {
                             type="text"
                             name="mark"
                             placeholder={mark}
-                            defaultValue="Mark"
+                            defaultValue={props.mark}
                             onChange={handleChange}
                         />
                     </Form.Group>

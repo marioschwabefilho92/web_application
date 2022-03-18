@@ -9,7 +9,10 @@ export function Grades(props) {
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     const [showUpdateGrade, setShowUpdateGrade] = useState(false);
     const [gradeId, setGradeId] = useState();
-    const [studentId, setStudentId] = useState();
+    const [discipline, setDiscipline] = useState();
+    const [mark, setMark] = useState();
+    const [studentsId, setStudentsId] = useState();
+    const [studentName, setStudentName] = useState();
 
     return (
         <>
@@ -23,7 +26,10 @@ export function Grades(props) {
                             <Button onClick={() => {
                                 setShowUpdateGrade(true);
                                 setGradeId(grade.id)
-                                setStudentId(props.student_id)
+                                setStudentsId(grade.students_id)
+                                setStudentName(props.name)
+                                setDiscipline(grade.discipline)
+                                setMark(grade.mark)
                             }}>Update</Button>
                         </td>
                         <td>
@@ -49,7 +55,10 @@ export function Grades(props) {
                     <UpdateGrade
                         show={showUpdateGrade}
                         id={gradeId}
-                        student_id={studentId}
+                        students_id={studentsId}
+                        student_name={studentName}
+                        discipline={discipline}
+                        mark={mark}
                         onHide={() => setShowUpdateGrade(false)}
                     />
                     : false
