@@ -2,8 +2,8 @@ import React from "react";
 import { useState } from "react";
 import ConfirmDelete from "../modals/ConfirmDelete"
 import UpdateGrade from "../modals/UpdateGrade";
-import { deleteGrade } from "../routes/Routes";
 import Button from 'react-bootstrap/Button'
+import { APIService } from "../routes/APIService";
 
 export function Grades(props) {
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -46,7 +46,7 @@ export function Grades(props) {
                     <ConfirmDelete
                         show={showConfirmDelete}
                         onHide={() => setShowConfirmDelete(false)}
-                        onSubmit={() => deleteGrade(gradeId)}
+                        onSubmit={() => APIService.deleteGrade(gradeId)}
                     />
                     : false
             }

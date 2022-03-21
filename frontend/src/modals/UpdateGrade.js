@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useState } from "react";
-import { updateGrade } from "../routes/Routes";
+import { APIService } from "../routes/APIService";
 
 export default function UpdateGrade(props) {
     const [formValue, setFormValue] = useState({
@@ -25,10 +25,9 @@ export default function UpdateGrade(props) {
     };
 
     const handleSubmit = () => {
-        updateGrade(props.id, formValue)
+        APIService.updateGrade(props.id, formValue)
     };
 
-    const { discipline, mark } = formValue;
     return (
         <Modal
             {...props}
@@ -54,7 +53,7 @@ export default function UpdateGrade(props) {
 
                     <Form.Group className="mb-3">
                         <Form.Label>Discipline</Form.Label>
-                        <Form.Select name="discipline" placeholder={discipline} onChange={handleChange}>
+                        <Form.Select name="discipline" value={props.discipline} onChange={handleChange}>
                             {avaliableDisciplines.map((discipline, id) => {
                                 return (
                                     <option key={id}>{discipline}</option>
@@ -69,7 +68,6 @@ export default function UpdateGrade(props) {
                             required
                             type="text"
                             name="mark"
-                            placeholder={mark}
                             defaultValue={props.mark}
                             onChange={handleChange}
                         />
