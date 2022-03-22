@@ -40,7 +40,7 @@ def get_students():
 def add_student():
     name = request.json['name']
 
-    student = Students(name)
+    student = Students(name=name)
     db.session.add(student)
     db.session.commit()
     return student_schema.jsonify(student)
@@ -83,11 +83,13 @@ def get_grades():
 
 @app.route('/add/grade', methods=['POST'])
 def add_grade():
-    students_id = request.json['students_id']
+    name = request.json['name']
+    student = db.session.query(Students).filter(Students.name == name).first()
+    students_id = student.id
     discipline = request.json['discipline']
     mark = request.json['mark']
 
-    grade = Grades(students_id, discipline, mark)
+    grade = Grades(students_id=students_id, discipline=discipline, mark=mark)
     db.session.add(grade)
     db.session.commit()
     return grade_schema.jsonify(grade)

@@ -22,7 +22,44 @@ export class APIService {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
         };
+
         axios.put(url, data_json, { headers }).then((response) => {
+            if (response.status === 200) {
+                window.location.reload(false);
+            }
+        }).catch(error => {
+            console.log(error)
+        });
+    }
+
+    static addStudent = (data) => {
+        console.log("addStudent triggered")
+        const url = `${URLS.ADD.STUDENT}`
+        const data_json = JSON.stringify(data)
+        const headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        };
+
+        axios.post(url, data_json, { headers }).then((response) => {
+            if (response.status === 200) {
+                window.location.reload(false);
+            }
+        }).catch(error => {
+            console.log(error)
+        });
+    }
+
+    static addGrade = (data) => {
+        console.log("addGrade triggered")
+        const url = `${URLS.ADD.GRADE}`
+        const data_json = JSON.stringify(data)
+        const headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        };
+
+        axios.post(url, data_json, { headers }).then((response) => {
             if (response.status === 200) {
                 window.location.reload(false);
             }
