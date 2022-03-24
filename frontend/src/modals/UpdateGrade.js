@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useState } from "react";
-import { APIService } from "../routes/APIService";
+import APIService from "../routes/APIService";
 
 export default function UpdateGrade(props) {
     const [formValue, setFormValue] = useState({

@@ -10,37 +10,33 @@ export function Students(props) {
     const [students] = useState(props.students)
     const [showAddGrade, setShowAddGrade] = useState(false);
     const [showAddStudent, setShowAddStudent] = useState(false);
-    console.log(students)
 
     return (
         <>
             <thead>
                 <tr>
-                    <td>Name</td>
-                    <td>Discipline</td>
-                    <td>Mark</td>
-                    <td>
+                    <th>Name</th>
+                    <th>Discipline</th>
+                    <th>Mark</th>
+                    <th>
                         <Button variant="warning" className={styles.add_grade_button} onClick={() => {
                             setShowAddGrade(true);
                         }}>ADD GRADE</Button>
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         <Button variant="success" className={styles.add_student_button} onClick={() => {
                             setShowAddStudent(true);
                         }}>ADD STUDENT</Button>
-                    </td>
+                    </th>
                 </tr>
             </thead>
-
-            {students.map(({ name, id, grades }) => {
-                return (
-                    <tbody key={id}>
-                        <Grades name={name} grades={grades} />
-                    </tbody>
-
-                )
-            })}
-
+            <tbody>
+                {students.map(({ name, id, grades }) => {
+                    return (
+                        <Grades key={id} name={name} grades={grades} />
+                    )
+                })}
+            </tbody>
             {
                 showAddGrade ?
                     <AddGrade

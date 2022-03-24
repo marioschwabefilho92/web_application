@@ -19,12 +19,20 @@ export default function App() {
     });
   }, []);
 
-  if (error) return `Error: ${error.message}`;
-  if (!students) return "No Students!"
+  if (error) {
+    return (
+      `Error: ${error.message}`
+    )
+  }
+  if (!students) {
+    return (
+      "No Students!"
+    )
+  }
 
   return (
     <div className="App">
-      <Table striped>
+      <Table bordered striped>
         <ErrorBoundary>
           <Students students={students} />
         </ErrorBoundary>

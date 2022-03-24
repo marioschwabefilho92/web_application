@@ -3,7 +3,7 @@ import { useState } from "react";
 import ConfirmDelete from "../modals/ConfirmDelete"
 import UpdateGrade from "../modals/UpdateGrade";
 import Button from 'react-bootstrap/Button'
-import { APIService } from "../routes/APIService";
+import APIService from "../routes/APIService";
 
 export function Grades(props) {
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
