@@ -48,14 +48,17 @@ export default class APIService {
         });
     }
 
+    // working on addGrade
     static addGrade = (data) => {
         console.log("addGrade triggered")
         const url = `${URLS.ADD.GRADE}`
         const data_json = JSON.stringify(data)
 
         axios.post(url, data_json, { headers }).then((response) => {
-            if (response.status === 200) {
+            if (response.data.status === 200) {
                 window.location.reload(false);
+            } else {
+                console.log(response.data);
             }
         }).catch(error => {
             console.log(error)

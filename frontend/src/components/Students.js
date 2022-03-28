@@ -8,6 +8,7 @@ import AddStudent from "../modals/AddStudent";
 
 export function Students(props) {
     const [students] = useState(props.students)
+    const [disciplines] = useState(["Biology", "Math", "Physics"]);
     const [showAddGrade, setShowAddGrade] = useState(false);
     const [showAddStudent, setShowAddStudent] = useState(false);
 
@@ -42,6 +43,7 @@ export function Students(props) {
                     <AddGrade
                         show={showAddGrade}
                         students={students}
+                        disciplines={disciplines}
                         onHide={() => setShowAddGrade(false)}
                     />
                     : false

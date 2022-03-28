@@ -7,12 +7,12 @@ import APIService from "../routes/APIService";
 
 export default function AddGrade(props) {
     const [students] = useState(props.students)
+    const [discipline] = useState(props.disciplines)
     const [formValue, setFormValue] = useState({
-        name: "",
-        discipline: "",
+        name: props.students[0].name,
+        discipline: props.disciplines[0],
         mark: ""
     });
-    const [avaliableDisciplines] = useState(["Biology", "Math", "Physics"]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -26,8 +26,11 @@ export default function AddGrade(props) {
     };
 
     const handleSubmit = () => {
-        console.log(formValue)
-        APIService.addGrade(formValue)
+        if (formValue.name !== ""  && formValue.discipline !== "" && formValue.mark !== "") {
+            APIService.addGrade(formValue)
+        } else {
+            console.log("Missing necessary information")
+        }
     };
 
     return (
@@ -39,14 +42,14 @@ export default function AddGrade(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Update Grade
+                    Add Grade
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Form.Group className="mb-3">
                         <Form.Label>Name</Form.Label>
-                        <Form.Select name="name" onChange={handleChange}>
+                        <Form.Select name="name" onChange={handleChange} defaultValue={formValue.name}>
                             {students.map(({ name, id }) => {
                                 return (
                                     <option key={id}>{name}</option>
@@ -57,8 +60,8 @@ export default function AddGrade(props) {
 
                     <Form.Group className="mb-3">
                         <Form.Label>Discipline</Form.Label>
-                        <Form.Select name="discipline" onChange={handleChange}>
-                            {avaliableDisciplines.map((discipline, id) => {
+                        <Form.Select name="discipline" onChange={handleChange} defaultValue={formValue.discipline}>
+                            {discipline.map((discipline, id) => {
                                 return (
                                     <option key={id}>{discipline}</option>
                                 )
@@ -73,6 +76,7 @@ export default function AddGrade(props) {
                             type="text"
                             name="mark"
                             onChange={handleChange}
+                            defaultValue={formValue.mark}
                         />
                     </Form.Group>
                 </Form>

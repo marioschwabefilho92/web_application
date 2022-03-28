@@ -6,6 +6,7 @@ import { useState } from "react";
 import APIService from "../routes/APIService";
 
 export default function UpdateGrade(props) {
+    console.log(props)
     const [formValue, setFormValue] = useState({
         students_id: props.students_id,
         discipline: props.discipline,
@@ -25,7 +26,11 @@ export default function UpdateGrade(props) {
     };
 
     const handleSubmit = () => {
-        APIService.updateGrade(props.id, formValue)
+        if (props.discipline === formValue.discipline && props.mark === formValue.mark) {
+            console.log("Nothing to update")
+        } else {
+            APIService.updateGrade(props.id, formValue)
+        }
     };
 
     return (
