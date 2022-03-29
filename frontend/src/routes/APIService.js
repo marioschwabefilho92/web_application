@@ -26,8 +26,14 @@ export default class APIService {
         const data_json = JSON.stringify(data)
 
         axios.put(url, data_json, { headers }).then((response) => {
-            if (response.status === 200) {
-                window.location.reload(false);
+            if (response.status === 200 && response.data.message === undefined) {
+                return (
+                    200
+                )
+            } else {
+                return (
+                    response.data.message
+                )
             }
         }).catch(error => {
             console.log(error)
@@ -48,17 +54,21 @@ export default class APIService {
         });
     }
 
-    // working on addGrade
     static addGrade = (data) => {
         console.log("addGrade triggered")
         const url = `${URLS.ADD.GRADE}`
         const data_json = JSON.stringify(data)
 
         axios.post(url, data_json, { headers }).then((response) => {
-            if (response.data.status === 200) {
+            if (response.status === 200 && response.data.message === undefined) {
                 window.location.reload(false);
+                return (
+                    200
+                )
             } else {
-                console.log(response.data);
+                return (
+                    response.data.message
+                )
             }
         }).catch(error => {
             console.log(error)

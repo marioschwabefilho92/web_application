@@ -11,7 +11,7 @@ export default function AddGrade(props) {
     const [formValue, setFormValue] = useState({
         name: props.students[0].name,
         discipline: props.disciplines[0],
-        mark: ""
+        mark: 0
     });
 
     const handleChange = (event) => {
@@ -26,7 +26,7 @@ export default function AddGrade(props) {
     };
 
     const handleSubmit = () => {
-        if (formValue.name !== ""  && formValue.discipline !== "" && formValue.mark !== "") {
+        if (formValue.name !== "" && formValue.discipline !== "" && formValue.mark !== "") {
             APIService.addGrade(formValue)
         } else {
             console.log("Missing necessary information")

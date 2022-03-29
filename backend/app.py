@@ -82,16 +82,22 @@ def get_grades():
     results = grades_schema.dump(all_grades)
     return jsonify(results)
 
-# working on route add grade
+
 @app.route('/add/grade', methods=['POST'])
 def add_grade():
-    name = request.json['name']
-    student = db.session.query(Students).filter(Students.name == name).first()
-    students_id = student.id
-    discipline = request.json['discipline']
-    mark = int(request.json['mark'])
-
-    grade = Grades(students_id=students_id, discipline=discipline, mark=mark)
+    try:
+        name = request.json['name']
+        student = db.session.query(Students).filter(
+            Students.name == name).first()
+        students_id = student.id
+        discipline = request.json['discipline']
+        mark = request.json['mark']
+        grade = Grades(students_id=students_id,
+                       discipline=discipline, mark=mark)
+    except ValueError as e:
+        response = jsonify(message='Error: {}. '.format(e))
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     try:
         grade.validate_mark(mark=mark)
@@ -99,7 +105,7 @@ def add_grade():
         db.session.commit()
         return grade_schema.jsonify(grade)
     except AssertionError as e:
-        response = jsonify(message='Error: {}. '.format(e), status=400)
+        response = jsonify(message='Error: {}. '.format(e))
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
 
@@ -112,18 +118,28 @@ def get_grades_by_id(id: int):
 
 @app.route('/update/grade/<id>', methods=['PUT'])
 def update_grade(id: int):
-    grade = Grades.query.get(id)
+    try:
+        grade = Grades.query.get(id)
 
-    students_id = request.json['students_id']
-    discipline = request.json['discipline']
-    mark = request.json['mark']
+        students_id = request.json['students_id']
+        discipline = request.json['discipline']
+        mark = request.json['mark']
+        grade.students_id = students_id
+        grade.discipline = discipline
+        grade.mark = mark
+    except ValueError as e:
+        response = jsonify(message='Error: {}. '.format(e))
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
-    grade.students_id = students_id
-    grade.discipline = discipline
-    grade.mark = mark
-
-    db.session.commit()
-    return grade_schema.jsonify(grade)
+    try:
+        grade.validate_mark(mark=mark)
+        db.session.commit()
+        return grade_schema.jsonify(grade)
+    except AssertionError as e:
+        response = jsonify(message='Error: {}. '.format(e))
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
 
 @app.route('/del/grade/<id>', methods=['DELETE'])
