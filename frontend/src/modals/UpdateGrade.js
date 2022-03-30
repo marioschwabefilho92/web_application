@@ -1,37 +1,73 @@
 import React from "react";
-import Modal from 'react-bootstrap/Modal'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import { useState } from "react";
 import APIService from "../routes/APIService";
 
 export default function UpdateGrade(props) {
-    console.log(props)
     const [formValue, setFormValue] = useState({
         students_id: props.students_id,
         discipline: props.discipline,
-        mark: props.mark
-    });
-    const [avaliableDisciplines] = useState(["Biology", "Math", "Physics"]);
+        mark: props.mark,
+        invalidMark: false,
+        validMark: true,
+        validatedMarkMessage: "Looks Good!"
+    })
+    const [avaliableDisciplines] = useState(["Biology", "Math", "Physics"])
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        const { name, value } = event.target
+        startValidation(name, value)
+    }
+
+    const startValidation = (name, value) => {
+        if (name === "mark") {
+            validateMark(name, value)
+        } else {
+            console.log("Nothing to validate")
+        }
+    }
+
+    const validateMark = (name, value) => {
         setFormValue((prevState) => {
-            return {
-                ...prevState,
-                [name]: value,
-            };
-        });
-        console.log(formValue)
-    };
+            if (value === "") {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidMark: true,
+                    validMark: false,
+                    validatedMarkMessage: "Mark value cannot be empty"
+                }
+            } else if (value < 0 || value > 100 || isNaN(value)) {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidMark: true,
+                    validMark: false,
+                    validatedMarkMessage: "Mark must be a number between 0 and 100"
+                }
+            } else {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidMark: false,
+                    validMark: true,
+                    validatedMarkMessage: "Looks Good!"
+                }
+            }
+        })
+    }
 
     const handleSubmit = () => {
         if (props.discipline === formValue.discipline && props.mark === formValue.mark) {
             console.log("Nothing to update")
+        } else if (formValue.validMark === false) {
+            console.log("First fix invalid values")
         } else {
             APIService.updateGrade(props.id, formValue)
         }
-    };
+    }
 
     return (
         <Modal
@@ -75,7 +111,11 @@ export default function UpdateGrade(props) {
                             name="mark"
                             defaultValue={props.mark}
                             onChange={handleChange}
+                            isInvalid={formValue.invalidMark}
+                            isValid={formValue.validMark}
                         />
+                        <Form.Control.Feedback type='invalid'>{formValue.validatedMarkMessage}</Form.Control.Feedback>
+                        <Form.Control.Feedback type='valid'>{formValue.validatedMarkMessage}</Form.Control.Feedback>
                     </Form.Group>
                 </Form>
             </Modal.Body>

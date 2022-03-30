@@ -1,4 +1,5 @@
 from email import message
+from shutil import ExecError
 from wsgiref import headers
 from flask import Flask, jsonify, request
 from models import db, Students, Grades
@@ -94,7 +95,7 @@ def add_grade():
         mark = request.json['mark']
         grade = Grades(students_id=students_id,
                        discipline=discipline, mark=mark)
-    except ValueError as e:
+    except Exception as e:
         response = jsonify(message='Error: {}. '.format(e))
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
@@ -127,7 +128,7 @@ def update_grade(id: int):
         grade.students_id = students_id
         grade.discipline = discipline
         grade.mark = mark
-    except ValueError as e:
+    except Exception as e:
         response = jsonify(message='Error: {}. '.format(e))
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response

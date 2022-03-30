@@ -27,10 +27,12 @@ export default class APIService {
 
         axios.put(url, data_json, { headers }).then((response) => {
             if (response.status === 200 && response.data.message === undefined) {
+                window.location.reload(false);
                 return (
                     200
                 )
             } else {
+                console.log(response.data.message)
                 return (
                     response.data.message
                 )
