@@ -1,6 +1,3 @@
-from email import message
-from shutil import ExecError
-from wsgiref import headers
 from flask import Flask, jsonify, request
 from models import db, Students, Grades
 from schemas import ma, StudentSchema, GradeSchema
@@ -105,7 +102,7 @@ def add_grade():
         db.session.add(grade)
         db.session.commit()
         return grade_schema.jsonify(grade)
-    except AssertionError as e:
+    except Exception as e:
         response = jsonify(message='Error: {}. '.format(e))
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
@@ -137,7 +134,7 @@ def update_grade(id: int):
         grade.validate_mark(mark=mark)
         db.session.commit()
         return grade_schema.jsonify(grade)
-    except AssertionError as e:
+    except Exception as e:
         response = jsonify(message='Error: {}. '.format(e))
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response

@@ -10,6 +10,7 @@ export function Grades(props) {
     const [showUpdateGrade, setShowUpdateGrade] = useState(false);
     const [gradeId, setGradeId] = useState();
     const [discipline, setDiscipline] = useState();
+    const [disciplines] = useState(props.disciplines);
     const [mark, setMark] = useState();
     const [studentsId, setStudentsId] = useState();
     const [studentName, setStudentName] = useState();
@@ -58,6 +59,7 @@ export function Grades(props) {
                         students_id={studentsId}
                         student_name={studentName}
                         discipline={discipline}
+                        disciplines={disciplines}
                         mark={mark}
                         onHide={() => setShowUpdateGrade(false)}
                     />

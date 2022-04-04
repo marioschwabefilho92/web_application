@@ -10,13 +10,16 @@ class Students(db.Model):
     grades = db.relationship('Grades', backref='students')
 
     def validate_name(self, name: str):
-        if not name:
-            raise AssertionError('No name provided')
-        if Students.query.filter(Students.name == name).first():
-            raise AssertionError('Name is already in use')
-        if len(name) < 1 or len(name) > 20:
-            raise AssertionError('Name must be between 1 and 20 characters')
-        return name
+        try:
+            name = str(name)
+            if not name:
+                raise Exception('No name provided')
+            if Students.query.filter(Students.name == name).first():
+                raise Exception('Name is already in use')
+            if len(name) < 1 or len(name) > 100:
+                raise Exception('Name must be between 1 and 100 characters')
+        except Exception:
+            raise Exception("Could not convert data to a string")
 
 
 class Grades(db.Model):
@@ -30,11 +33,7 @@ class Grades(db.Model):
     def validate_mark(self, mark: int):
         try:
             mark = int(mark)
-        except:
-            raise AssertionError(
-                'Mark should be an integer and conversion failed')
-        if not mark and mark != 0:
-            raise AssertionError('No mark provided')
-        if mark < 0 or mark > 100:
-            raise AssertionError('Mark must be a number between 0 and 100')
-        return mark
+            if mark < 0 or mark > 100:
+                raise Exception('Mark must be a number between 0 and 100')
+        except Exception:
+            raise Exception("Could not convert data to an integer")

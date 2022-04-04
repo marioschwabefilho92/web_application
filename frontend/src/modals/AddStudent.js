@@ -7,21 +7,73 @@ import APIService from "../routes/APIService";
 
 export default function AddStudent(props) {
     const [formValue, setFormValue] = useState({
-        name: ""
+        name: "",
+        invalidName: false,
+        validName: false,
+        validatedNameMessage: "Looks Good!"
     });
 
+    const hasBlankSpaces = (str) => {
+        return str.match(/^\s+$/) !== null;
+    }
+
+    const allLetter = (str) => {
+        if (!/[^a-zA-Z]/.test(str)) {
+            return false
+        } else {
+            return true
+        }
+    }
+
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        const { name, value } = event.target
+        validateName(name, value)
+    }
+
+    const validateName = (name, value) => {
         setFormValue((prevState) => {
-            return {
-                ...prevState,
-                [name]: value,
-            };
-        });
-    };
+            if (value === "" || hasBlankSpaces(value)) {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidName: true,
+                    validName: false,
+                    validatedNameMessage: "Name cannot be empty"
+                }
+            } else if (value.length < 0 || value.length > 100) {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidName: true,
+                    validName: false,
+                    validatedNameMessage: "Name must be between 1 and 100 characters"
+                }
+            } else if (allLetter(value)) {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidName: true,
+                    validName: false,
+                    validatedNameMessage: "Name must be only alphabets characters"
+                }
+            } else {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidName: false,
+                    validName: true,
+                    validatedNameMessage: "Looks Good!"
+                }
+            }
+        })
+    }
 
     const handleSubmit = () => {
-        APIService.addStudent(formValue)
+        if (formValue.validName === true && formValue.invalidName === false) {
+            APIService.addStudent(formValue)
+        } else {
+            console.log("First fix invalid values")
+        }
     };
 
     return (
@@ -45,7 +97,11 @@ export default function AddStudent(props) {
                             type="text"
                             name="name"
                             onChange={handleChange}
+                            isInvalid={formValue.invalidName}
+                            isValid={formValue.validName}
                         />
+                        <Form.Control.Feedback type='invalid'>{formValue.validatedNameMessage}</Form.Control.Feedback>
+                        <Form.Control.Feedback type='valid'>{formValue.validatedNameMessage}</Form.Control.Feedback>
                     </Form.Group>
                 </Form>
             </Modal.Body>

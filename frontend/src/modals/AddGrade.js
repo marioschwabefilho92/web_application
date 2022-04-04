@@ -11,25 +11,72 @@ export default function AddGrade(props) {
     const [formValue, setFormValue] = useState({
         name: props.students[0].name,
         discipline: props.disciplines[0],
-        mark: 0
+        mark: 0,
+        invalidMark: false,
+        validMark: true,
+        validatedMarkMessage: "Looks Good!"
     });
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        const { name, value } = event.target
+        startValidation(name, value)
+    }
+
+    const hasBlankSpaces = (str) => {
+        return str.match(/^\s+$/) !== null;
+    }
+
+    const startValidation = (name, value) => {
+        if (name === "mark") {
+            validateMark(name, value)
+        } else if (name === "discipline" || name === "name") {
+            setFormValue((prevState) => {
+                return {
+                    ...prevState,
+                    [name]: value
+                }
+            })
+        } else {
+            console.log("Nothing to validate")
+        }
+    }
+
+
+    const validateMark = (name, value) => {
         setFormValue((prevState) => {
-            return {
-                ...prevState,
-                [name]: value,
-            };
-        });
-        console.log(formValue)
-    };
+            if (value === "" || hasBlankSpaces(value)) {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidMark: true,
+                    validMark: false,
+                    validatedMarkMessage: "Mark value cannot be empty"
+                }
+            } else if (value < 0 || value > 100 || isNaN(value)) {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidMark: true,
+                    validMark: false,
+                    validatedMarkMessage: "Mark must be a number between 0 and 100"
+                }
+            } else {
+                return {
+                    ...prevState,
+                    [name]: value,
+                    invalidMark: false,
+                    validMark: true,
+                    validatedMarkMessage: "Looks Good!"
+                }
+            }
+        })
+    }
 
     const handleSubmit = () => {
-        if (formValue.name !== "" && formValue.discipline !== "" && formValue.mark !== "") {
+        if (formValue.validMark === true && formValue.invalidMark === false) {
             APIService.addGrade(formValue)
         } else {
-            console.log("Missing necessary information")
+            console.log("First fix invalid values")
         }
     };
 
@@ -77,7 +124,11 @@ export default function AddGrade(props) {
                             name="mark"
                             onChange={handleChange}
                             defaultValue={formValue.mark}
+                            isInvalid={formValue.invalidMark}
+                            isValid={formValue.validMark}
                         />
+                        <Form.Control.Feedback type='invalid'>{formValue.validatedMarkMessage}</Form.Control.Feedback>
+                        <Form.Control.Feedback type='valid'>{formValue.validatedMarkMessage}</Form.Control.Feedback>
                     </Form.Group>
                 </Form>
             </Modal.Body>

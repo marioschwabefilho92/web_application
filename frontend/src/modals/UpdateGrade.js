@@ -14,7 +14,11 @@ export default function UpdateGrade(props) {
         validMark: true,
         validatedMarkMessage: "Looks Good!"
     })
-    const [avaliableDisciplines] = useState(["Biology", "Math", "Physics"])
+    const [disciplines] = useState(props.disciplines)
+
+    const hasBlankSpaces = (str) => {
+        return str.match(/^\s+$/) !== null;
+    }
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -24,14 +28,22 @@ export default function UpdateGrade(props) {
     const startValidation = (name, value) => {
         if (name === "mark") {
             validateMark(name, value)
+        } else if (name === "discipline") {
+            setFormValue((prevState) => {
+                return {
+                    ...prevState,
+                    [name]: value
+                }
+            })
         } else {
             console.log("Nothing to validate")
         }
     }
 
+
     const validateMark = (name, value) => {
         setFormValue((prevState) => {
-            if (value === "") {
+            if (value === "" || hasBlankSpaces(value)) {
                 return {
                     ...prevState,
                     [name]: value,
@@ -62,10 +74,10 @@ export default function UpdateGrade(props) {
     const handleSubmit = () => {
         if (props.discipline === formValue.discipline && props.mark === formValue.mark) {
             console.log("Nothing to update")
-        } else if (formValue.validMark === false) {
-            console.log("First fix invalid values")
-        } else {
+        } else if (formValue.validMark === true && formValue.invalidMark === false) {
             APIService.updateGrade(props.id, formValue)
+        } else {
+            console.log("First fix invalid values")
         }
     }
 
@@ -94,8 +106,8 @@ export default function UpdateGrade(props) {
 
                     <Form.Group className="mb-3">
                         <Form.Label>Discipline</Form.Label>
-                        <Form.Select name="discipline" value={props.discipline} onChange={handleChange}>
-                            {avaliableDisciplines.map((discipline, id) => {
+                        <Form.Select name="discipline" value={formValue.discipline} onChange={handleChange}>
+                            {disciplines.map((discipline, id) => {
                                 return (
                                     <option key={id}>{discipline}</option>
                                 )
@@ -117,6 +129,7 @@ export default function UpdateGrade(props) {
                         <Form.Control.Feedback type='invalid'>{formValue.validatedMarkMessage}</Form.Control.Feedback>
                         <Form.Control.Feedback type='valid'>{formValue.validatedMarkMessage}</Form.Control.Feedback>
                     </Form.Group>
+                    <Button type="submit">Submit form</Button>
                 </Form>
             </Modal.Body>
             <Modal.Footer>

@@ -34,7 +34,7 @@ export function Students(props) {
             <tbody>
                 {students.map(({ name, id, grades }) => {
                     return (
-                        <Grades key={id} name={name} grades={grades} />
+                        <Grades key={id} name={name} grades={grades} disciplines={disciplines} />
                     )
                 })}
             </tbody>
