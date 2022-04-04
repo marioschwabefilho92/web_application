@@ -24,7 +24,7 @@ services:
         "log_destination=stderr"
       ]
 
-  app:
+  backend:
     build: ./backend
     environment:
       - PYTHONUNBUFFERED=1
@@ -32,7 +32,15 @@ services:
       - 5000:5000
     networks:
       network_configuration:
-        ipv4_address: ${APP_IP}
+        ipv4_address: ${BACKEND_IP}
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    networks:
+      network_configuration:
+        ipv4_address: ${FRONTEND_IP}
 
 networks:
   network_configuration:
